@@ -1,0 +1,121 @@
+﻿@{
+    ViewData["Title"] = "Generate Data";
+}
+<style>
+    .table-container {
+        overflow-y: auto;
+        height: 300px;
+    }
+
+    .fixed-header thead {
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+        z-index: 1;
+    }
+</style>
+<h2>Generate Data</h2>
+
+<div class="table-container">
+    <table class="table fixed-header">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Gender</th>
+                <th>Hobi</th>
+                <th>Umur</th>
+            </tr>
+        </thead>
+        <tbody id="data-body">
+        </tbody>
+    </table>
+    <div id="table-info"></div>
+</div>
+<div style="text-align:center; margin-top: 20px;">
+    <button id="generate-btn" class="btn btn-primary" style="margin-right: 10px;">Generate Data</button>
+    <button id="submit-btn" class="btn btn-success" style="margin-left: 10px;" disabled>Submit</button>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#generate-btn').click(function () {
+                generateData();
+            });
+
+            $('#submit-btn').click(function () {
+                const dataRows = $('#data-body').find('tr');
+
+                // Prepare data to be sent to server
+                const dataToSend = [];
+                dataRows.each(function () {
+                    const rowData = [];
+                    $(this).find('td').each(function () {
+                        rowData.push($(this).text());
+                    });
+                    dataToSend.push(rowData);
+                });
+
+                $.ajax({
+                    url: '/Home/SubmitData',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(dataToSend),
+                    success: function (response) {
+                        alert('Data berhasil disimpan!');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        alert('Terjadi kesalahan saat menyimpan data.');
+                    }
+                });
+            });
+        });
+
+        function generateData() {
+
+            for (let i = 0; i < 1000; i++) {
+                const nama = generateRandomString(2, 25);
+                const gender = Math.floor(Math.random() * 2) + 1;
+                const hobi = generateRandomHobiChar();
+                const umur = Math.floor(Math.random() * 23) + 18;
+
+                // Append the generated row to the table
+                const tableBody = document.getElementById('data-body');
+                const newRow = `<tr><td>${nama}</td><td>${gender}</td><td>${hobi}</td><td>${umur}</td></tr>`;
+                tableBody.insertAdjacentHTML('beforeend', newRow);
+            }
+
+            // Enable the Submit button when data reaches 1000 rows
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = false;
+
+            // Update table info
+            updateTableInfo();
+           
+        }
+
+        function updateTableInfo() {
+            const rowCount = $('#data-body tr').length;
+            $('#table-info').text('Total Rows: ' + rowCount);
+        }
+
+        function generateRandomString(minLength, maxLength) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        function generateRandomHobiChar() {
+            const hobis = ['A', 'B', 'C', 'D', 'E'];
+            return hobis[Math.floor(Math.random() * hobis.length)];
+        }
+
+    </script>
+}
+

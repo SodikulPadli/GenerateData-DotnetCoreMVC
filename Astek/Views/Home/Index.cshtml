@@ -29,8 +29,8 @@
         <tbody id="data-body">
         </tbody>
     </table>
-    <div id="table-info"></div>
 </div>
+<div id="table-info"></div>
 <div style="text-align:center; margin-top: 20px;">
     <button id="generate-btn" class="btn btn-primary" style="margin-right: 10px;">Generate Data</button>
     <button id="submit-btn" class="btn btn-success" style="margin-left: 10px;" disabled>Submit</button>
@@ -40,14 +40,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Click button Generate Data
             $('#generate-btn').click(function () {
                 generateData();
             });
 
+            // Click button Submit
             $('#submit-btn').click(function () {
                 const dataRows = $('#data-body').find('tr');
 
-                // Prepare data to be sent to server
                 const dataToSend = [];
                 dataRows.each(function () {
                     const rowData = [];
@@ -57,6 +58,7 @@
                     dataToSend.push(rowData);
                 });
 
+                // Send Data To Server 
                 $.ajax({
                     url: '/Home/SubmitData',
                     method: 'POST',
@@ -73,13 +75,16 @@
             });
         });
 
+        // Function for generate data (Nama,IdGender,IdHobi,Umur)
+
         function generateData() {
 
+            //Looping 1000 Data
             for (let i = 0; i < 1000; i++) {
-                const nama = generateRandomString(2, 25);
-                const gender = Math.floor(Math.random() * 2) + 1;
-                const hobi = generateRandomHobiChar();
-                const umur = Math.floor(Math.random() * 23) + 18;
+                const nama = generateRandomString(2, 25); // Random String 2 - 25 Karakter
+                const gender = Math.floor(Math.random() * 2) + 1; // Random IdGender 1 dan 2
+                const hobi = generateRandomHobiChar(); //Random IdHobi A,B,C,D,E
+                const umur = Math.floor(Math.random() * 23) + 18; //Random Umur 18-40 
 
                 // Append the generated row to the table
                 const tableBody = document.getElementById('data-body');
@@ -93,14 +98,14 @@
 
             // Update table info
             updateTableInfo();
-           
-        }
 
+        }
+        //Function table info
         function updateTableInfo() {
             const rowCount = $('#data-body tr').length;
             $('#table-info').text('Total Rows: ' + rowCount);
         }
-
+        //Function generate random string for Name
         function generateRandomString(minLength, maxLength) {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
@@ -111,6 +116,7 @@
             return result;
         }
 
+        //Function generate random string for IdHobi
         function generateRandomHobiChar() {
             const hobis = ['A', 'B', 'C', 'D', 'E'];
             return hobis[Math.floor(Math.random() * hobis.length)];

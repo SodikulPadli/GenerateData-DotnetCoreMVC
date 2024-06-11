@@ -9,17 +9,9 @@ namespace Astek.Controllers
 {
     public class HomeController : Controller
     {
-        public class Astek
-        {
-            public string Nama { get; set; }
-            public int Gender { get; set; }
-            public String Hobi { get; set; }
-            public int Umur { get; set; }
-        }
+
 
         private readonly ILogger<HomeController> _logger;
-
-        private string connectionString = @"Server=DESKTOP-QDCU1GI;Database=AstekTest;User Id=sa;Password=sodikul1;Trusted_Connection=True";
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -34,52 +26,43 @@ namespace Astek.Controllers
         [HttpPost]
         public IActionResult SubmitData([FromBody] List<List<string>> data)
         {
-
+            //Initial Datatable 
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Nama", typeof(string));
             dataTable.Columns.Add("IdGender", typeof(int));
             dataTable.Columns.Add("IdHobi", typeof(string));
             dataTable.Columns.Add("Umur", typeof(int));
 
+            //Looping data from parameter
             foreach (var row in data)
             {
+                // Add datatable
                 dataTable.Rows.Add(row[0].ToString(), int.Parse(row[1]), row[2].ToString(), int.Parse(row[3]));
             }
 
+            // Create Intial Server For Connection
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
             {
                 DataSource = "DESKTOP-QDCU1GI",
                 InitialCatalog = "AstekTest",
-                UserID="sa",
-                Password="sodikul1",
-                IntegratedSecurity=true,
-                TrustServerCertificate=true
+                UserID = "sa",
+                Password = "sodikul1",
+                IntegratedSecurity = true,
+                TrustServerCertificate = true
             };
 
-            // Panggil stored procedure untuk menyimpan data
-            //using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            //{
-            //    connection.Open();
-
-            //    SqlCommand command = new SqlCommand("InsertPersonalData", connection);
-            //    command.CommandType = CommandType.StoredProcedure;
-            //    SqlParameter parameter = command.Parameters.AddWithValue("@Data", dataTable);
-            //    parameter.SqlDbType = SqlDbType.Structured;
-            //    command.ExecuteNonQuery();
-            //}
-
+            //Connection Server
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
 
+                // Select Store Procedur  with sqlcommand
                 using (SqlCommand command = new SqlCommand("InsertPersonalData", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-
-                    // Tentukan struktur tabel parameter secara eksplisit
-                    SqlParameter parameter = command.Parameters.AddWithValue("@Data", dataTable);
+                    SqlParameter parameter = command.Parameters.AddWithValue("@Data", dataTable);// Add Parameter
                     parameter.SqlDbType = SqlDbType.Structured;
-                    parameter.TypeName = "dbo.PersonalUDTT"; // Sesuaikan dengan nama jenis tabel Anda
+                    //parameter.TypeName = "dbo.PersonalUDTT";
 
                     command.ExecuteNonQuery();
                 }
@@ -92,7 +75,7 @@ namespace Astek.Controllers
             return View();
         }
 
-        
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

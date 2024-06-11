@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Astek")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb266bc5bd31a6a7421af92de73231a78aef2d24")]
 [assembly: System.Reflection.AssemblyProductAttribute("Astek")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Astek")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

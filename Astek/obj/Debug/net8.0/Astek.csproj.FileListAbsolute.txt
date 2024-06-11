@@ -68,3 +68,4 @@ C:\Users\sodikul\source\repos\Astek\Astek\obj\Debug\net8.0\Astek.csproj.Up2Date
 C:\Users\sodikul\source\repos\Astek\Astek\obj\Debug\net8.0\refint\Astek.dll
 C:\Users\sodikul\source\repos\Astek\Astek\obj\Debug\net8.0\Astek.genruntimeconfig.cache
 C:\Users\sodikul\source\repos\Astek\Astek\obj\Debug\net8.0\ref\Astek.dll
+C:\Users\sodikul\source\repos\Astek\Astek\obj\Debug\net8.0\Astek.sourcelink.json
